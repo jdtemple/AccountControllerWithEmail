@@ -9,7 +9,18 @@ namespace AccountControllerWithEmail.Data
   public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
   {
     public ApplicationDbContext()
-        : base("ApplicationDbConnection", throwIfV1Schema: false)
+        : base("ApplicationDbConnection")
+    {
+      Configuration.LazyLoadingEnabled = false;
+      Configuration.ProxyCreationEnabled = false;
+    }
+
+    /// <summary>
+    /// testing constructor, allows us to supply our own connection string
+    /// </summary>
+    /// <param name="connStr"></param>
+    public ApplicationDbContext(string connStr)
+      : base(connStr)
     {
       Configuration.LazyLoadingEnabled = false;
       Configuration.ProxyCreationEnabled = false;
@@ -32,6 +43,26 @@ namespace AccountControllerWithEmail.Data
       //Conventions
       //DateTime Convention, setting precision to 0
       modelBuilder.Conventions.Add<DateTime2Convention>();
+    }
+
+    public void RejectChanges()
+    {
+      foreach (var entry in ChangeTracker.Entries())
+      {
+        switch (entry.State)
+        {
+          case EntityState.Added:
+            entry.State = EntityState.Detached;
+            break;
+          case EntityState.Modified:
+            entry.CurrentValues.SetValues(entry.OriginalValues);
+            entry.State = EntityState.Unchanged;
+            break;
+          case EntityState.Deleted:
+            entry.State = EntityState.Unchanged;
+            break;
+        }
+      }
     }
   }
 }

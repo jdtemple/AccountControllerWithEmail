@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using AccountControllerWithEmail.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AccountControllerWithEmail;
-using AccountControllerWithEmail.Controllers;
+using System.Web.Mvc;
 
-namespace AccountControllerWithEmail.Tests.Controllers
+namespace AccountControllerWithEmail.Tests.UnitTests
 {
   [TestClass]
   public class HomeControllerTest
